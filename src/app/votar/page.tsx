@@ -68,6 +68,9 @@ export default function Votar() {
       .then((d) => {
         if (cancelado) return;
         if (!acharParticipante(d.id)) throw new Error("participante sumiu da config");
+        // De castigo nesta semana: nem começa a rodada. Sem isso ela votaria
+        // em todo mundo pra só então levar um 403 na hora de enviar.
+        if (d.podeVotar === false) throw new Error("de castigo nesta semana");
         setEu(d.id);
         setCodigo(guardado);
         setPronto(true);

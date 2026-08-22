@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { participantePorCodigo } from "@/config/codigos";
 import { acharParticipante, PARTICIPANTES_ATIVOS } from "@/config/participantes";
 import { alvosJaVotados } from "@/lib/db";
+import { podeVotarNaSemana } from "@/lib/participacao";
 import { semanaAtual } from "@/lib/semana";
 
 export const dynamic = "force-dynamic";
@@ -44,5 +45,7 @@ export async function POST(req: Request) {
     semana,
     alvosVotados: alvos,
     jaVotou: precisaVotarEm > 0 && alvos.length >= precisaVotarEm,
+    // Ela entra normalmente e vê o mural — só não vota nesta rodada.
+    podeVotar: podeVotarNaSemana(pessoa, semana),
   });
 }

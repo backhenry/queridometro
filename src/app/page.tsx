@@ -7,7 +7,13 @@ import { acharParticipante } from "@/config/participantes";
 import { lerCodigo, limparCodigo, salvarCodigo } from "@/lib/eu";
 import { rotuloDaSemana, semanaAtual } from "@/lib/semana";
 
-type Sessao = { id: string; nome: string; jaVotou: boolean; alvosVotados: string[] };
+type Sessao = {
+  id: string;
+  nome: string;
+  jaVotou: boolean;
+  alvosVotados: string[];
+  podeVotar: boolean;
+};
 
 export default function Inicio() {
   const [sessao, setSessao] = useState<Sessao | null>(null);
@@ -142,7 +148,16 @@ export default function Inicio() {
           </div>
 
           <div className="mt-8 flex flex-col gap-3">
-            {sessao.jaVotou ? (
+            {!sessao.podeVotar ? (
+              <div className="vidro rounded-3xl p-5 text-center">
+                <p className="text-3xl">🙊</p>
+                <p className="mt-2 font-semibold">Você está de castigo essa semana</p>
+                <p className="mt-1 text-sm text-[var(--color-texto-suave)]">
+                  Continua levando voto de todo mundo, mas não vota nessa rodada.
+                  Na segunda você volta.
+                </p>
+              </div>
+            ) : sessao.jaVotou ? (
               <div className="vidro rounded-3xl p-5 text-center">
                 <p className="text-3xl">✅</p>
                 <p className="mt-2 font-semibold">Você já votou essa semana</p>

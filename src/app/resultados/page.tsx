@@ -2,6 +2,7 @@ import Link from "next/link";
 import Avatar from "@/components/Avatar";
 import { EMOJIS, MOSTRAR_JUSTIFICATIVAS } from "@/config/emojis";
 import { acharParticipante } from "@/config/participantes";
+import { podeVotarNaSemana } from "@/lib/participacao";
 import { resolverEmoji } from "@/lib/emoji";
 import { resultadosDaSemana } from "@/lib/db";
 import { rotuloDaSemana, semanaAtual, semanaRelativa } from "@/lib/semana";
@@ -43,6 +44,10 @@ export default async function Resultados({
     .map((r) => acharParticipante(r.alvo))
     .filter((p): p is NonNullable<typeof p> => Boolean(p));
 
+  // Quem estava de castigo não conta no "x de y já votaram" — senão o placar
+  // dessa semana nunca fecha.
+  const podemVotar = colunas.filter((p) => podeVotarNaSemana(p, semana)).length;
+
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 py-8">
       <header className="mb-6 text-center">
@@ -61,7 +66,7 @@ export default async function Resultados({
             ? "ninguém votou ainda"
             : votantes.length === 1
               ? "1 pessoa votou"
-              : `${votantes.length} de ${colunas.length} já votaram`}
+              : `${votantes.length} de ${podemVotar} já votaram`}
         </p>
       </header>
 

@@ -163,6 +163,20 @@ Assim o código dele para de funcionar, ele some da votação, mas os votos das
 semanas em que ele ainda jogava continuam no mural. Apagar a linha deixaria
 esses votos órfãos.
 
+**Castigo do monstro:** pra alguém ficar uma semana sem votar, mas continuar
+levando voto dos outros, use `semVoto` com a chave da semana:
+
+```ts
+{ id: "joao", nome: "João", foto: "/participantes/joao.jpg", semVoto: "2026-W35" },
+```
+
+Ele entra no site normalmente e vê o mural, só não abre a votação. **O castigo
+acaba sozinho** quando virar a semana — não precisa lembrar de tirar de lá.
+Pra mais de uma semana, passe uma lista: `semVoto: ["2026-W35", "2026-W36"]`.
+
+Não confunda com `ativo: false`, que tira a pessoa do queridômetro inteiro:
+ela some da votação de todo mundo e para de receber voto.
+
 **Código vazou ou a pessoa perdeu:** troque na mão em `src/config/codigos.ts` e
 republique. O antigo morre na hora e os votos que ela já deu ficam intactos.
 

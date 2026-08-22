@@ -32,6 +32,12 @@ export type Participante = {
   nome: string;
   foto?: string;
   ativo?: boolean;
+  /**
+   * Semanas em que a pessoa NÃO pode votar, mas continua levando voto dos
+   * outros — o castigo do monstro. Use a chave da semana ("2026-W35"), ou uma
+   * lista delas. Passou a semana, o castigo acaba sozinho.
+   */
+  semVoto?: string | string[];
 };
 
 export const PARTICIPANTES: Participante[] = [

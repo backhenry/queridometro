@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { registrarVotos } from "@/lib/db";
 import { semanaAtual } from "@/lib/semana";
-import { PARTICIPANTES_ATIVOS } from "@/config/participantes";
+import { PARTICIPANTES_ATIVOS, acharParticipante } from "@/config/participantes";
+import { podeVotarNaSemana } from "@/lib/participacao";
 import { participantePorCodigo } from "@/config/codigos";
 import { emojiValido } from "@/lib/emoji";
 import type { Voto } from "@/lib/tipos";
@@ -40,6 +41,15 @@ export async function POST(req: Request) {
   }
 
   const semana = semanaAtual();
+
+  // De castigo: continua levando voto dos outros, mas não vota nesta rodada.
+  const pessoa = acharParticipante(votante)!;
+  if (!podeVotarNaSemana(pessoa, semana)) {
+    return NextResponse.json(
+      { erro: "Você está de castigo essa semana e não pode votar." },
+      { status: 403 },
+    );
+  }
   const vistos = new Set<string>();
   const paraGravar: Voto[] = [];
 

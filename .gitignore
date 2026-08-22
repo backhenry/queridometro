@@ -1,0 +1,33 @@
+node_modules/
+.next/
+out/
+.DS_Store
+next-env.d.ts
+*.tsbuildinfo
+.vercel
+
+# ─────────────────────────────────────────────────────────────
+#  DADOS DA SUA TURMA — nada disso vai pro GitHub
+# ─────────────────────────────────────────────────────────────
+
+# Chaves do Supabase.
+.env
+.env.local
+.env*.local
+
+# Os códigos de acesso. Publicar isso é entregar a identidade de todo
+# mundo: quem pega o código da Ana vota como a Ana.
+src/config/codigos.ts
+
+# Nomes e fotos da sua turma. As fotos são de pessoas de verdade — não
+# saem daqui sem elas saberem.
+src/config/participantes.ts
+public/participantes/*
+!public/participantes/.gitkeep
+fotos/
+
+# Banco local do modo sem Supabase.
+.dados/
+
+# Backups de votos apagados na mão.
+.backups/

@@ -1,0 +1,9 @@
+# As fotos que o site usa ficam em public/participantes/.
+# Esta pasta é só o original que você jogou aqui — não precisa ir pro servidor.
+fotos/
+
+# Banco local do modo sem Supabase.
+.dados/
+
+# Backups de votos: nao precisam ir pro servidor
+.backups/

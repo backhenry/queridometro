@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  --color-fundo: #0a0616;
+  --color-fundo-2: #1a0b2e;
+  --color-vidro: rgba(255, 255, 255, 0.06);
+  --color-borda: rgba(255, 255, 255, 0.12);
+  --color-texto-suave: rgba(255, 255, 255, 0.62);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(1000px 600px at 15% -10%, rgba(217, 70, 239, 0.22), transparent 60%),
+    radial-gradient(900px 600px at 90% 110%, rgba(56, 189, 248, 0.18), transparent 60%),
+    linear-gradient(170deg, var(--color-fundo) 0%, var(--color-fundo-2) 100%);
+  background-attachment: fixed;
+  color: white;
+  -webkit-font-smoothing: antialiased;
+  font-family:
+    ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", sans-serif;
+  overscroll-behavior-y: none;
+}
+
+/* Nada de seleção de texto acidental ao tocar rápido nos emojis. */
+.sem-selecao {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.vidro {
+  background: var(--color-vidro);
+  border: 1px solid var(--color-borda);
+  backdrop-filter: blur(12px);
+}
+
+/* Um respiro pra barra de gestos do iPhone. */
+.safe-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

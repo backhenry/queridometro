@@ -32,7 +32,21 @@ export default function Inicio() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ codigo }),
       });
-      const dados = await r.json();
+
+      // Nem toda resposta é JSON: quando o servidor cai de vez, vem uma página
+      // de erro ou nada. Ler direto com .json() estoura uma mensagem do
+      // navegador que não diz nada pra quem está tentando entrar.
+      const bruto = await r.text();
+      let dados: Partial<Sessao> & { erro?: string };
+      try {
+        dados = JSON.parse(bruto);
+      } catch {
+        throw new Error(
+          r.ok
+            ? "Resposta estranha do servidor. Tente de novo."
+            : "O site está com problema agora. Tente daqui a pouco.",
+        );
+      }
 
       if (!r.ok) {
         // Código salvo que deixou de valer (você trocou): limpa e pede de novo.
@@ -40,8 +54,14 @@ export default function Inicio() {
         throw new Error(dados?.erro ?? "Código não confere.");
       }
 
+      // Confere o mínimo antes de confiar: resposta 200 com corpo torto
+      // deixaria a tela num estado meio montado, sem dizer o motivo.
+      if (typeof dados.id !== "string" || typeof dados.nome !== "string") {
+        throw new Error("Resposta incompleta do servidor. Tente de novo.");
+      }
+
       if (salvandoAgora) salvarCodigo(codigo);
-      setSessao(dados);
+      setSessao(dados as Sessao);
       setDigitado("");
     } catch (e) {
       setErro(e instanceof Error ? e.message : "Deu ruim ao entrar.");

@@ -36,7 +36,21 @@ export async function POST(req: Request) {
   }
 
   const semana = semanaAtual();
-  const alvos = await alvosJaVotados(semana, id);
+
+  // Sem try/catch aqui, uma falha do banco virava um 500 de corpo vazio, e o
+  // navegador estourava um "The string did not match the expected pattern"
+  // ao tentar ler aquilo como JSON. Erro de banco tem que chegar escrito.
+  let alvos: string[];
+  try {
+    alvos = await alvosJaVotados(semana, id);
+  } catch (e) {
+    console.error("Falha ao consultar o banco:", e);
+    return NextResponse.json(
+      { erro: "O banco está fora do ar. Tente de novo em alguns minutos." },
+      { status: 503 },
+    );
+  }
+
   const precisaVotarEm = PARTICIPANTES_ATIVOS.filter((p) => p.id !== id).length;
 
   return NextResponse.json({
